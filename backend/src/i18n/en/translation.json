@@ -1,0 +1,146 @@
+{
+  "SUCCESS": {
+    "RECORD_CREATED": "{record} created successfully",
+    "RECORD_UPDATED": "{record} updated successfully",
+    "RECORD_FETCHED": "{record} fetched successfully",
+    "RECORD_LIST_FETCHED": "{record} list fetched successfully",
+    "RECORD_DELETED": "{record} deleted successfully",
+    "RECORD_SAVED": "{record} saved successfully",
+    "NOTIFICATION_QUEUED": "Notification queued for delivery",
+    "ESTIMATE_SENT": "Estimate sent to the vehicle owner",
+    "ESTIMATE_RESPONDED": "Thank you, your response has been recorded",
+    "STATUS_CHANGED": "Job status updated to {status}",
+    "HEALTH_OK": "Service is healthy"
+  },
+  "ERROR": {
+    "RECORD_NOT_FOUND": "{record} not found",
+    "RECORD_ALREADY_EXISTS": "{record} already exists",
+    "VALIDATION_FAILED": "Validation failed",
+    "INVALID_UUID": "Invalid identifier format",
+    "INVALID_ENUM_VALUE": "Invalid value",
+    "FORBIDDEN": "You do not have permission to perform this action",
+    "INVALID_STATUS_TRANSITION": "Job cannot move from {from} to {to}",
+    "LINK_EXPIRED": "This link has expired",
+    "TOO_MANY_REQUESTS": "Too many requests, please try again later",
+    "INTERNAL_ERROR": "Something went wrong, please try again",
+    "LINK_NOT_FOUND": "This link is not valid",
+    "LINK_PURPOSE_MISMATCH": "This link cannot be used for this action",
+    "EMAIL_ALREADY_REGISTERED": "An account with this email already exists",
+    "AMOUNT_EXCEEDS_BALANCE": "Payment amount is more than the balance due",
+    "CANNOT_DEACTIVATE_SELF": "You cannot deactivate or demote your own account",
+    "DECISIONS_INCOMPLETE": "Please approve or reject every item of the estimate",
+    "DISCOUNT_TOO_LARGE": "Discount cannot be more than the subtotal",
+    "EMAIL_REQUIRED_FOR_CHANNEL": "An email address is required to use the EMAIL channel",
+    "INVALID_MECHANIC": "The selected person is not an active mechanic of this garage",
+    "INVALID_PROBLEM_REFERENCE": "The referenced problem does not belong to this job card",
+    "LAST_GARAGE_ADMIN": "The garage must keep at least one active admin",
+    "NO_CONTACT_FOR_CHANNEL": "The customer has no contact details for the selected channel",
+    "NO_LINE_ITEMS": "Add at least one line item before sending",
+    "NO_PROBLEMS_RECORDED": "Record at least one problem before notifying the owner",
+    "NOTHING_TO_INVOICE": "There is no approved work to invoice",
+    "ODOMETER_DECREASED": "Odometer reading cannot be lower than the last recorded value",
+    "PAYMENT_IN_FUTURE": "Payment date cannot be in the future",
+    "TOO_MANY_ATTACHMENTS": "This problem already has the maximum number of photos",
+    "UNKNOWN_LINE_ITEM": "One or more items do not belong to this estimate",
+    "UNSUPPORTED_FILE_TYPE": "Only JPEG, PNG, WebP images and PDF files are allowed",
+    "NOT_ASSIGNED_MECHANIC": "This job is not assigned to you",
+    "MECHANIC_TRANSITION_NOT_ALLOWED": "Mechanics can only move a job from In progress to Quality check",
+    "NOT_FOUND": "Record not found",
+    "ESTIMATE_ALREADY_RESPONDED": "This estimate has already been answered",
+    "ESTIMATE_NOT_APPROVED": "The estimate must be approved before work starts",
+    "ESTIMATE_NOT_DRAFT": "Only draft estimates can be changed",
+    "HAS_OPEN_JOB": "This record has an open job card",
+    "INVOICE_EXISTS": "An invoice already exists for this job card",
+    "INVOICE_NOT_PAID": "The invoice must be fully paid before delivery",
+    "INVOICE_VOID": "This invoice has been voided",
+    "JOB_CLOSED": "This job card is closed",
+    "JOB_NOT_EDITABLE": "Problems cannot be changed at this stage of the job",
+    "JOB_NOT_ESTIMABLE": "An estimate cannot be created at this stage of the job",
+    "JOB_NOT_READY": "The job must be ready for pickup before invoicing",
+    "NOT_FAILED": "Only failed notifications can be retried",
+    "OPEN_JOB_EXISTS": "This vehicle already has an open job card",
+    "PHONE_ALREADY_EXISTS": "Another customer already uses this phone number",
+    "PROBLEM_LOCKED": "This problem is on a sent estimate and cannot be changed",
+    "REGISTRATION_EXISTS": "A vehicle with this registration number already exists",
+    "ESTIMATE_EXPIRED": "This estimate has expired",
+    "NOT_IMPLEMENTED": "This feature is not available yet",
+    "INVOICE_REQUIRED": "Generate the invoice before handing the vehicle back",
+    "VEHICLE_INACTIVE": "This vehicle is inactive"
+  },
+  "AUTH_SUCCESS": {
+    "LOGIN": "Logged in successfully",
+    "LOGOUT": "Logged out successfully",
+    "REFRESHED": "Session refreshed",
+    "REGISTERED": "Garage registered successfully",
+    "PASSWORD_CHANGED": "Password changed successfully",
+    "LOGGED_OUT_ALL": "Logged out from all devices",
+    "PROFILE_FETCHED": "Profile fetched successfully"
+  },
+  "AUTH_ERROR": {
+    "UNAUTHENTICATED": "Authentication required",
+    "INVALID_CREDENTIALS": "Invalid email or password. After several failed attempts the account is locked for a few minutes.",
+    "INVALID_TOKEN": "Invalid or expired token",
+    "ACCOUNT_INACTIVE": "Your account is inactive",
+    "GARAGE_SUSPENDED": "This garage is suspended",
+    "TOKEN_EXPIRED": "Your session has expired, please refresh",
+    "SESSION_REVOKED": "Your session has ended, please log in again",
+    "PASSWORD_CHANGE_REQUIRED": "You must change your temporary password before continuing",
+    "CURRENT_PASSWORD_INCORRECT": "Current password is incorrect",
+    "PASSWORD_REUSED": "New password must be different from the current password",
+    "CLIENT_TYPE_REQUIRED": "Missing or invalid x-client-type header",
+    "CSRF_REJECTED": "Request origin is not allowed",
+    "REFRESH_TOKEN_MISSING": "Refresh token is missing"
+  },
+  "ENTITY": {
+    "GARAGE": "Garage",
+    "STAFF": "Staff member",
+    "CUSTOMER": "Customer",
+    "VEHICLE": "Vehicle",
+    "JOB_CARD": "Job card",
+    "PROBLEM": "Problem",
+    "ATTACHMENT": "Attachment",
+    "ESTIMATE": "Estimate",
+    "NOTIFICATION": "Notification",
+    "INVOICE": "Invoice",
+    "PAYMENT": "Payment",
+    "DASHBOARD": "Dashboard",
+    "AUDIT_LOG": "Audit log",
+    "LINK": "Link",
+    "SESSION": "Session"
+  },
+  "NOTIFICATION": {
+    "JOB_CHECKED_IN": {
+      "SUBJECT": "{garageName}: {registration} checked in",
+      "BODY": "Hi {customerName}, your vehicle {registration} has been checked in at {garageName} (job {jobNumber}). Track it here: {link}"
+    },
+    "PROBLEMS_FOUND": {
+      "SUBJECT": "{garageName}: we found {problemCount} issue(s) on {registration}",
+      "BODY": "Hi {customerName}, our inspection of {registration} found: {problemSummary}. See details and photos: {link}"
+    },
+    "ESTIMATE_SENT": {
+      "SUBJECT": "{garageName}: estimate for {registration} ({currency} {total})",
+      "BODY": "Hi {customerName}, the repair estimate for {registration} is {currency} {total}. Please review and approve here: {link} (valid until {validUntil})"
+    },
+    "JOB_APPROVED": {
+      "SUBJECT": "{garageName}: thank you, work on {registration} is confirmed",
+      "BODY": "Hi {customerName}, thank you. We have recorded your decision for {registration}; approved amount {currency} {approvedTotal}. Track progress: {link}"
+    },
+    "READY_FOR_PICKUP": {
+      "SUBJECT": "{garageName}: {registration} is ready for pickup",
+      "BODY": "Hi {customerName}, good news: {registration} is ready for pickup at {garageName}. {link}"
+    },
+    "INVOICE_ISSUED": {
+      "SUBJECT": "{garageName}: invoice {invoiceNumber} for {registration}",
+      "BODY": "Hi {customerName}, invoice {invoiceNumber} for {registration} is {currency} {total}. Amount due: {currency} {balanceDue}. {link}"
+    },
+    "SERVICE_REMINDER": {
+      "SUBJECT": "{garageName}: {registration} is due for service on {serviceDate}",
+      "BODY": "Hi {customerName}, {registration} is due for its next service on {serviceDate}. Call {garagePhone} to book a slot with {garageName}."
+    },
+    "STAFF_WELCOME": {
+      "SUBJECT": "Your {garageName} staff account",
+      "BODY": "Hi {staffName}, an account ({role}) has been created for you at {garageName}. Ask your admin for your temporary password; you will be asked to change it on first login."
+    },
+    "PERSONAL_NOTE": "Message from the garage: {message}"
+  }
+}

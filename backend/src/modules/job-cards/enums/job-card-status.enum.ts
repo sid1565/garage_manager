@@ -1,0 +1,17 @@
+/** Lifecycle from spec §3.1. DELIVERED and CANCELLED are terminal. */
+export enum JobCardStatus {
+  CHECKED_IN = 'CHECKED_IN',
+  DIAGNOSING = 'DIAGNOSING',
+  AWAITING_APPROVAL = 'AWAITING_APPROVAL',
+  APPROVED = 'APPROVED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  QUALITY_CHECK = 'QUALITY_CHECK',
+  READY_FOR_PICKUP = 'READY_FOR_PICKUP',
+  DELIVERED = 'DELIVERED',
+  CANCELLED = 'CANCELLED',
+}
+
+export const TERMINAL_JOB_STATUSES: readonly JobCardStatus[] = [
+  JobCardStatus.DELIVERED,
+  JobCardStatus.CANCELLED,
+];

@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/*
+ * Garage Manager — Premium Workshop Edition
+ * Deep steel, molten amber, carbon blacks with glassmorphism panels.
+ */
+@theme {
+  /* ── Core Palette ───────────────────────────────────────────────────────── */
+  --color-ink: #0f1623;
+  --color-ink-soft: #3d4d60;
+  --color-ink-faint: #6b7e94;
+
+  --color-concrete: #f0f3f7;
+  --color-concrete-deep: #e2e8ef;
+  --color-panel: #ffffff;
+  --color-panel-glass: rgba(255,255,255,0.82);
+
+  --color-line: #d4dce6;
+  --color-line-soft: #e8edf3;
+
+  /* Amber/Signal — primary action color */
+  --color-signal: #f59e0b;
+  --color-signal-vivid: #d97706;
+  --color-signal-soft: #fef3c7;
+  --color-signal-glow: rgba(245,158,11,0.18);
+
+  /* Steel Blue — secondary/interactive */
+  --color-steel: #1d4ed8;
+  --color-steel-mid: #2563eb;
+  --color-steel-soft: #dbeafe;
+
+  /* Go / Stop */
+  --color-go: #16a34a;
+  --color-go-soft: #dcfce7;
+  --color-stop: #dc2626;
+  --color-stop-soft: #fee2e2;
+
+  /* Sidebar gradient colors */
+  --color-sidebar-from: #0c1322;
+  --color-sidebar-to: #111827;
+  --color-plate-blue: #1e3a8a;
+
+  /* ── Typography ─────────────────────────────────────────────────────────── */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), var(--font-barlow), sans-serif;
+
+  /* ── Radii ──────────────────────────────────────────────────────────────── */
+  --radius-plate: 3px;
+  --radius-control: 10px;
+  --radius-panel: 16px;
+  --radius-card: 18px;
+
+  /* ── Shadows ────────────────────────────────────────────────────────────── */
+  --shadow-card: 0 2px 8px 0 rgba(15,22,35,0.07), 0 0 0 1px rgba(15,22,35,0.06);
+  --shadow-card-hover: 0 8px 28px 0 rgba(15,22,35,0.13), 0 0 0 1px rgba(15,22,35,0.08);
+  --shadow-sidebar: 4px 0 24px 0 rgba(15,22,35,0.22);
+}
+
+/* ── Color Scheme ───────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+}
+
+html {
+  background: #e8edf4;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "tnum" 1;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: 0.008em;
+  line-height: 1.15;
+}
+
+/* ── Focus Ring ─────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── Background texture: subtle diagonal lines like a workshop floor ─────── */
+.bg-workshop {
+  background-color: #e8edf4;
+  background-image:
+    linear-gradient(135deg, rgba(245,158,11,0.03) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(245,158,11,0.03) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(245,158,11,0.03) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(245,158,11,0.03) 25%, #e8edf4 25%);
+  background-size: 24px 24px;
+}
+
+/* ── Number plate: the app's one ornament ───────────────────────────────── */
+.plate {
+  display: inline-flex;
+  align-items: stretch;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-plate);
+  background: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.plate__strip {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--color-plate-blue);
+  color: #fff;
+  font-size: 0.42em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0 0.28em 0.22em;
+}
+.plate__text {
+  padding: 0.18em 0.42em 0.12em;
+  letter-spacing: 0.06em;
+}
+
+/* ── Thin scrollbar for bays ────────────────────────────────────────────── */
+.bays {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+/* ── Micro animations ───────────────────────────────────────────────────── */
+@keyframes slide-up-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.3); }
+  50%       { box-shadow: 0 0 0 8px rgba(245,158,11,0); }
+}
+
+.animate-slide-up { animation: slide-up-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in  { animation: fade-in 0.25s ease both; }
+.animate-pulse-glow { animation: pulse-glow 2s infinite; }
+
+/* ── Glassmorphism card ─────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+/* ── Sidebar gradient ───────────────────────────────────────────────────── */
+.sidebar-gradient {
+  background: linear-gradient(180deg, #0c1322 0%, #111827 100%);
+}
+
+/* ── Amber gradient button ──────────────────────────────────────────────── */
+.btn-amber {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #0f1623;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.35), 0 1px 2px rgba(0,0,0,0.1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-amber:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 4px 16px rgba(245,158,11,0.45), 0 1px 2px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+.btn-amber:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(245,158,11,0.3);
+}
+
+/* ── Status dot colors ──────────────────────────────────────────────────── */
+.status-dot-CHECKED_IN        { background: #6b7e94; }
+.status-dot-DIAGNOSING        { background: #3b82f6; }
+.status-dot-AWAITING_APPROVAL { background: #f59e0b; }
+.status-dot-APPROVED          { background: #10b981; }
+.status-dot-IN_PROGRESS       { background: #16a34a; }
+.status-dot-QUALITY_CHECK     { background: #8b5cf6; }
+.status-dot-READY_FOR_PICKUP  { background: #06b6d4; }
+.status-dot-DELIVERED         { background: #374151; }
+.status-dot-CANCELLED         { background: #dc2626; }
+
+/* ── Number input appearance ────────────────────────────────────────────── */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

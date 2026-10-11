@@ -1,0 +1,158 @@
+import { RequestMethod } from '@nestjs/common';
+import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
+import {
+  CUSTOMER_LINK_PURPOSES_KEY,
+  IS_PUBLIC_KEY,
+  SECTION_KEY,
+} from '../../src/common/constants/metadata-keys';
+import { SECTION_PERMISSIONS } from '../../src/common/constants/section-permissions';
+import { UserRole } from '../../src/common/enums';
+import { createTestApp } from './create-test-app';
+
+/** Routes allowed to be "authenticated only" (self-service, auth design §3). */
+const AUTHENTICATED_ONLY = new Set([
+  'GET auth/me',
+  'POST auth/logout',
+  'POST auth/logout-all',
+  'POST auth/change-password',
+]);
+/** Anonymous routes allowed by the auth design. */
+const PUBLIC_ROUTES = new Set([
+  'POST auth/register',
+  'POST auth/login',
+  'POST auth/refresh',
+  'GET health',
+]);
+
+interface IRouteInfo {
+  key: string;
+  method: string;
+  path: string;
+  auth: string;
+}
+
+const METHOD_NAMES = new Map<number, string>([
+  [RequestMethod.GET, 'GET'],
+  [RequestMethod.POST, 'POST'],
+  [RequestMethod.PUT, 'PUT'],
+  [RequestMethod.PATCH, 'PATCH'],
+  [RequestMethod.DELETE, 'DELETE'],
+]);
+
+const joinPath = (...parts: string[]): string =>
+  parts
+    .map((p) => p.replace(/^\/+|\/+$/g, ''))
+    .filter(Boolean)
+    .join('/');
+
+/**
+ * OWASP API5 regression guard: every route must make an explicit auth decision —
+ * a @Section, a customer-link decorator, or an approved public/self-service entry.
+ * Also writes output/garage-api-endpoints.md (generated, never hand-edited).
+ */
+describe('Route auth contract (e2e)', () => {
+  let app: NestExpressApplication;
+  const routes: IRouteInfo[] = [];
+
+  beforeAll(async () => {
+    app = await createTestApp();
+    const discovery = app.get(DiscoveryService);
+    const scanner = app.get(MetadataScanner);
+    const reflector = app.get(Reflector);
+
+    for (const wrapper of discovery.getControllers()) {
+      const { instance, metatype } = wrapper;
+      if (!instance || !metatype) continue;
+      const base = (Reflect.getMetadata('path', metatype) as string | undefined) ?? '';
+      const proto = Object.getPrototypeOf(instance) as object;
+      for (const name of scanner.getAllMethodNames(proto)) {
+        const handler = Reflect.get(proto, name) as object;
+        const sub = Reflect.getMetadata('path', handler) as string | undefined;
+        const verb = Reflect.getMetadata('method', handler) as number | undefined;
+        if (sub === undefined || verb === undefined) continue;
+        const targets = [handler as () => void, metatype];
+        const isPublic = reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, targets);
+        const section = reflector.getAllAndOverride<string>(SECTION_KEY, targets);
+        const purposes = reflector.getAllAndOverride<string[]>(CUSTOMER_LINK_PURPOSES_KEY, targets);
+        const path = joinPath(base, sub);
+        const method = METHOD_NAMES.get(verb) ?? String(verb);
+        const auth = purposes
+          ? `link: ${purposes.join(', ')}`
+          : section
+            ? `@Section(${section})`
+            : isPublic
+              ? 'public'
+              : 'authenticated';
+        routes.push({ key: `${method} ${path}`, method, path, auth });
+      }
+    }
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('discovers the full API surface', () => {
+    expect(routes.length).toBeGreaterThan(50);
+  });
+
+  it('every route has an explicit, approved auth decision', () => {
+    const violations = routes.filter(
+      (r) =>
+        (r.auth === 'public' && !PUBLIC_ROUTES.has(r.key)) ||
+        (r.auth === 'authenticated' && !AUTHENTICATED_ONLY.has(r.key)),
+    );
+    expect(violations).toEqual([]);
+  });
+
+  it('every customer-link route lives under portal/:token', () => {
+    const bad = routes.filter(
+      (r) => r.auth.startsWith('link:') && !r.path.startsWith('portal/:token'),
+    );
+    expect(bad).toEqual([]);
+  });
+
+  it('writes the generated endpoint × section table', () => {
+    const roles = [
+      UserRole.GARAGE_ADMIN,
+      UserRole.SERVICE_ADVISOR,
+      UserRole.MECHANIC,
+      UserRole.PLATFORM_ADMIN,
+    ];
+    const who = (auth: string): string => {
+      const m = /^@Section\((\w+)\)$/.exec(auth);
+      if (!m)
+        return auth.startsWith('link')
+          ? 'vehicle owner (link)'
+          : auth === 'public'
+            ? 'anyone'
+            : 'any signed-in user';
+      return Object.entries(SECTION_PERMISSIONS)
+        .filter(
+          ([role, sections]) => roles.includes(role as UserRole) && sections.has(m[1] as never),
+        )
+        .map(([role]) => role)
+        .join(', ');
+    };
+    const sorted = [...routes].sort(
+      (a, b) => a.path.localeCompare(b.path) || a.method.localeCompare(b.method),
+    );
+    const lines = [
+      '# Garage API — Endpoint × Auth Table',
+      '',
+      '> Generated by `test/e2e/route-auth-contract.e2e-spec.ts` from live route metadata. Do not edit by hand.',
+      '> Base URL: `/api/v1`. Request/response schemas: Swagger at `/docs`.',
+      '',
+      `Total endpoints: **${sorted.length}**`,
+      '',
+      '| Method | Path | Auth | Roles allowed |',
+      '|---|---|---|---|',
+      ...sorted.map((r) => `| ${r.method} | \`/${r.path}\` | ${r.auth} | ${who(r.auth)} |`),
+      '',
+    ];
+    writeFileSync(join(__dirname, '../../../output/garage-api-endpoints.md'), lines.join('\n'));
+  });
+});
